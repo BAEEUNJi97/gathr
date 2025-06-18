@@ -1,20 +1,36 @@
-// src/contexts/FilterContext.tsx
-import React, { createContext, useContext, useState } from 'react';
-import { GatheringFilters } from '@/types/gathering';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from 'react';
+import { GatheringFilters, GatheringType } from '@/types/gathering';
 
-const FilterContext = createContext<{
+interface FilterContextType {
   filters: GatheringFilters;
-  setFilters: React.Dispatch<React.SetStateAction<GatheringFilters>>;
-} | null>(null);
+  setFilters: Dispatch<SetStateAction<GatheringFilters>>;
+}
 
-// FilterProvider 컴포넌트에 children 속성 추가
-export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const FilterContext = createContext<FilterContextType | undefined>(undefined);
+
+interface FilterProviderProps {
+  children: ReactNode;
+  initialFilters?: Partial<GatheringFilters>;
+}
+
+export function FilterProvider({
+  children,
+  initialFilters,
+}: FilterProviderProps) {
   const [filters, setFilters] = useState<GatheringFilters>({
-    type: 'DALLAEMFIT',
-    subType: '',
-    location: '건대입구',
+    type: GatheringType.DALLAEM_FIT,
+    subType: undefined,
+    location: '',
     date: '',
     sortBy: 'dateTime',
+    ...initialFilters,
   });
 
   return (
@@ -22,13 +38,12 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       {children}
     </FilterContext.Provider>
   );
-};
+}
 
-// 필터를 사용하는 커스텀 훅
-export const useFilters = () => {
+export function useFilters(): FilterContextType {
   const context = useContext(FilterContext);
   if (!context) {
     throw new Error('useFilters must be used within a FilterProvider');
   }
   return context;
-};
+}

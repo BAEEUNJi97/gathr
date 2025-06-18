@@ -11,20 +11,17 @@ interface Props {
   openModal: () => void;
 }
 
-/** 메인 타입 옵션 (백엔드 enum 사용) */
 const MAIN_TYPES = [
   GatheringType.DALLAEM_FIT,
   GatheringType.WORKATION,
 ] as const;
 
-/** 서브 타입 옵션 (undefined 포함) */
 const SUB_TYPES = [
   undefined,
   GatheringType.OFFICE_STRETCHING,
   GatheringType.MINDFULNESS,
 ] as const;
 
-/** 위치 옵션 */
 const LOCATIONS = [
   '전체',
   '건대입구',
@@ -33,7 +30,6 @@ const LOCATIONS = [
   '홍대입구',
 ] as const;
 
-/** 정렬 옵션 */
 const SORT_OPTIONS = [
   { value: 'registrationEnd', label: '마감 임박' },
   { value: 'participantCount', label: '참여 인원 순' },
@@ -49,7 +45,6 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
 
   return (
     <section className="mb-10">
-      {/* 헤더 */}
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-xl font-bold">지금 모임에 참여해보세요</h2>
@@ -65,7 +60,6 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
         )}
       </div>
 
-      {/* 메인 타입 */}
       <nav className="flex gap-4 mb-4 border-b pb-2">
         {MAIN_TYPES.map((type) => (
           <button
@@ -82,7 +76,6 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
         ))}
       </nav>
 
-      {/* 서브 타입 */}
       <div className="flex flex-wrap gap-2 mb-4">
         {SUB_TYPES.map((subType) => (
           <button
@@ -103,9 +96,7 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
         ))}
       </div>
 
-      {/* 추가 필터: 위치, 날짜, 정렬 */}
       <div className="flex items-center gap-2">
-        {/* 위치 드롭다운 */}
         <div className="relative">
           <button
             className="flex items-center px-4 py-2 border rounded text-sm bg-white"
@@ -135,7 +126,6 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
           )}
         </div>
 
-        {/* 날짜 */}
         <input
           type="date"
           className="px-3 py-2 border rounded text-sm"
@@ -143,7 +133,6 @@ export default function FilterHeader({ filters, setFilters, openModal }: Props) 
           onChange={e => setFilters(prev => ({ ...prev, date: e.target.value }))}
         />
 
-        {/* 정렬 */}
         <select
           className="px-3 py-2 border rounded text-sm"
           value={filters.sortBy}

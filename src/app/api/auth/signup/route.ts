@@ -26,11 +26,11 @@ export async function POST(req: NextRequest) {
     console.log("✅ 회원가입 성공:", data);
     return NextResponse.json(data, { status: 200 });
 
-  } catch (error: unknown) {
+  }  catch (error: unknown) {
     console.error("🔥 signup 요청 중 예외 발생:", error);
-    return NextResponse.json(
-      { code: "SERVER_ERROR", message: "회원가입 요청 중 오류가 발생했습니다." },
-      { status: 500 }
-    );
+   return NextResponse.json(
+     { code: "SERVER_ERROR", message: "회원가입 요청 중 오류가 발생했습니다." },
+    { status: 500 }
+   );
   }
 }

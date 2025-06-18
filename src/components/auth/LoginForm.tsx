@@ -3,7 +3,7 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthProvider';
 import Image from 'next/image';
-import axios from 'axios'
+import axios from 'axios';
 
 export default function LoginForm() {
   const { signin } = useContext(AuthContext);
@@ -30,13 +30,13 @@ export default function LoginForm() {
 
     try {
       await signin(form.email, form.password);
-    } catch (err: unknown) {
-    if (axios.isAxiosError(err) && err.response) {
-      setError(err.response.data?.message ?? '로그인 실패');
-    } else {
-      setError('로그인 실패 (알 수 없는 오류)');
+    }catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data?.message ?? '로그인 실패');
+      } else {
+        setError('로그인 실패 (알 수 없는 오류)');
     }
-    }
+  }
   };
 
   return (

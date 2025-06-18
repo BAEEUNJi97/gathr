@@ -89,7 +89,6 @@ export default function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validate()) return;
 
     try {
@@ -97,19 +96,13 @@ export default function SignupForm() {
       await signup(form.email, form.password, form.name, form.companyName);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        // 에러 응답 데이터에서 parameter/message 분리
         const { parameter, message } = error.response.data as {
           parameter?: keyof ErrorState;
           message?: string;
         };
-
         if (parameter && message) {
-          // keyof ErrorState 로 확실히 캐스팅
           const key = parameter as keyof ErrorState;
-          setErrors(prev => ({
-            ...prev,
-            [key]: message,
-          }));
+          setErrors(prev => ({ ...prev, [key]: message }));
         } else {
           alert(message ?? '회원가입 실패');
         }

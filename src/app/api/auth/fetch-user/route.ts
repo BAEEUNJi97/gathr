@@ -20,18 +20,19 @@ export async function POST(req: NextRequest) {
     console.log("✅ 사용자 정보 응답:", response.data);
     return NextResponse.json(response.data, { status: 200 });
 
-  } catch (error: unknown) {
+ } catch (error: unknown) {
+    // AxiosError 여부 확인
     if (axios.isAxiosError(error) && error.response) {
-  console.error("❌ fetch-user 실패:", error.response.data);
-  return NextResponse.json(
-    { error: error.response.data },
-    { status: error.response.status }
-  );
-}
-console.error("❌ fetch-user 실패 (알 수 없는 오류):", error);
-return NextResponse.json(
-  { error: '사용자 정보 조회 실패' },
-  { status: 500 }
-);
+      console.error("❌ fetch-user 실패:", error.response.data);
+      return NextResponse.json(
+        { error: error.response.data },
+        { status: error.response.status }
+      );
+    }
+    console.error("❌ fetch-user 실패 (알 수 없는 오류):", error);
+    return NextResponse.json(
+      { error: '사용자 정보 조회 실패' },
+      { status: 500 }
+    );
   }
 }

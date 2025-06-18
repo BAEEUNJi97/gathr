@@ -19,8 +19,6 @@ export function getTimeRemaining(registrationEnd: string): string {
 
   if (diff <= 0) return '마감됨';
 
-  // const diffMinutes = Math.floor(diff / (1000 * 60));
-  // const diffHours = Math.floor(diff / (1000 * 60 * 60));
 
   const endDate = new Date(registrationEnd);
   const isToday = new Date().toDateString() === endDate.toDateString();
