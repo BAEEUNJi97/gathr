@@ -2,20 +2,21 @@
 
 import { useState } from 'react';
 import { useCreateGathering } from '@/hooks/api/useCreateGathering';
-import { GatheringType, CreateGatheringForm } from '@/types/gathering';;
+import { GatheringType, CreateGatheringForm } from '@/types/gathering';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import SelectionService from './SelectionService';
+import { mapGatheringTypeToApi } from '@/utils/mapGatheringTypeToApi';
 
 export default function CreateMeetingForm({ onSuccess }: { onSuccess: () => void }) {
   const [form, setForm] = useState<CreateGatheringForm>({
-   name: '',
-   location: '',
-   type: GatheringType.DALLAEM_FIT,  // enum 값으로 변경!
-   dateTime: '',
-   registrationEnd: '',
-   capacity: 5,
-   image: null,
+    name: '',
+    location: '',
+    type: GatheringType.OFFICE_STRETCHING,
+    dateTime: '',
+    registrationEnd: '',
+    capacity: 5,
+    image: null,
   });
 
   const [meetingDate, setMeetingDate] = useState<Date | null>(null);
@@ -55,12 +56,14 @@ export default function CreateMeetingForm({ onSuccess }: { onSuccess: () => void
       return;
     }
 
+    // ⭐️ type 변환 부분!
     const updatedForm: CreateGatheringForm = {
       ...form,
+      type: mapGatheringTypeToApi(form.type) as GatheringType,
       dateTime: meetingDate.toISOString(),
       registrationEnd: deadlineDate ? deadlineDate.toISOString() : '',
     };
-
+  console.log('[handleSubmit] 서버로 넘길 updatedForm:', updatedForm);
     create.mutate(updatedForm);
   };
 

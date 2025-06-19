@@ -1,155 +1,181 @@
-"use client";
+import { useFilters } from '@/contexts/FilterContext';
+import { MAIN_TAB_TYPE_MAP, GatheringType, MainTab, GATHERING_LABEL_MAP } from '@/types/gathering';
+import { ChevronDown, Sun, Umbrella } from 'lucide-react';
+import {  useState } from 'react';
+import CreateMeetingButtonWithModal from '@/components/common/CreateMeetingButtonWithModal';
 
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { AuthContext } from '@/contexts/AuthProvider';
-import { GatheringFilters, GatheringType } from '@/types/gathering';
-import { ChevronDown } from 'lucide-react';
-
-interface Props {
-  filters: GatheringFilters;
-  setFilters: Dispatch<SetStateAction<GatheringFilters>>;
-  openModal: () => void;
+function getDateLabel(date: string) {
+  if (!date) return "날짜 전체";
+  const [, mm, dd] = date.split('-');
+  return `${Number(mm)}월 ${Number(dd)}일`;
 }
 
-const MAIN_TYPES = [
-  GatheringType.DALLAEM_FIT,
-  GatheringType.WORKATION,
-] as const;
+export default function FilterHeader() {
+  const { filters, setFilters } = useFilters();
 
-const SUB_TYPES = [
-  undefined,
-  GatheringType.OFFICE_STRETCHING,
-  GatheringType.MINDFULNESS,
-] as const;
+  // 메인탭 선택
+  const handleMainTab = (tab: MainTab) => {
+    setFilters((prev) => ({
+      ...prev,
+      mainTab: tab,
+      subTab: '',
+    }));
+  };
 
-const LOCATIONS = [
-  '전체',
-  '건대입구',
-  '을지로3가',
-  '신림',
-  '홍대입구',
-] as const;
+  // 서브탭 목록
+  const subTabTypes: GatheringType[] = [...MAIN_TAB_TYPE_MAP[filters.mainTab]];
 
-const SORT_OPTIONS = [
-  { value: 'registrationEnd', label: '마감 임박' },
-  { value: 'participantCount', label: '참여 인원 순' },
-  { value: 'dateTime', label: '모임 날짜' },
-] as const;
+  // 서브탭 선택
+  const handleSubTab = (type: GatheringType | "") => {
+    setFilters((prev) => ({
+      ...prev,
+      subTab: prev.subTab === type ? "" : type,
+    }));
+  };
 
-type SortValue = typeof SORT_OPTIONS[number]['value'];
+  // 지역/날짜/정렬 필터
+    const handleLocation = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setFilters((prev) => ({
+      ...prev,
+      location: e.target.value as "" | "건대입구" | "을지로3가" | "신림" | "홍대입구",
+    }));
 
-export default function FilterHeader({ filters, setFilters, openModal }: Props) {
-  const { token } = useContext(AuthContext);
-  const isLoggedIn = Boolean(token);
-  const [locOpen, setLocOpen] = useState(false);
+ const handleDate = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFilters((prev) => ({
+      ...prev,
+      date: e.target.value,
+    }));
+
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setFilters((prev) => ({
+      ...prev,
+      sortBy: e.target.value as "dateTime" | "registrationEnd" | "participantCount",
+      sortOrder: e.target.value === 'dateTime' ? 'desc' : 'asc',
+    }));
+
+  // 날짜 필터 버튼을 위한 상태
+   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   return (
-    <section className="mb-10">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-xl font-bold">지금 모임에 참여해보세요</h2>
-          <p className="text-sm text-gray-500 mt-1">함께 할 사람이 없나요?</p>
+    <div className="mb-8">
+      {/* 인트로 문구 */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div className="rounded-full bg-orange-50 w-14 h-14 flex items-center justify-center text-3xl">
+            <span role="img" aria-label="함께달램">🤗</span>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500 font-medium">함께 할 사람이 없나요?</div>
+            <div className="text-xl md:text-2xl font-bold text-gray-900 mt-1">지금 모임에 참여해보세요</div>
+          </div>
         </div>
-        {isLoggedIn && (
-          <button
-            onClick={openModal}
-            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-          >
-            모임 만들기
-          </button>
-        )}
+        <CreateMeetingButtonWithModal />
       </div>
 
-      <nav className="flex gap-4 mb-4 border-b pb-2">
-        {MAIN_TYPES.map((type) => (
+      {/* 메인탭 */}
+      <div className="flex gap-8 mb-4">
+        <button
+          className={`flex items-center gap-1 px-0 pb-1 text-base font-semibold border-b-2 transition ${
+            filters.mainTab === 'DALLEM'
+              ? 'border-orange-600 text-orange-600'
+              : 'border-transparent text-gray-400'
+          }`}
+          onClick={() => handleMainTab('DALLEM')}
+        >
+          달램핏
+          <Sun className="w-4 h-4 ml-1" />
+        </button>
+        <button
+          className={`flex items-center gap-1 px-0 pb-1 text-base font-semibold border-b-2 transition ${
+            filters.mainTab === 'WORKATION'
+              ? 'border-orange-600 text-orange-600'
+              : 'border-transparent text-gray-400'
+          }`}
+          onClick={() => handleMainTab('WORKATION')}
+        >
+          워케이션
+          <Umbrella className="w-4 h-4 ml-1" />
+        </button>
+      </div>
+
+      {/* 서브탭 */}
+      <div className="flex gap-2 mb-6">
+        <button
+          type="button"
+          className={`px-4 py-2 rounded-lg font-semibold transition ${
+            filters.subTab === '' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700'
+          }`}
+          onClick={() => handleSubTab("")}
+        >
+          전체
+        </button>
+        {subTabTypes.map((type) => (
           <button
             key={type}
-            className={`text-sm font-medium pb-1 transition-colors duration-200 ${
-              filters.type === type
-                ? 'text-black border-b-2 border-black'
-                : 'text-gray-400 border-b-2 border-transparent'
+            type="button"
+            className={`px-4 py-2 rounded-lg font-semibold transition ${
+              filters.subTab === type ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700'
             }`}
-            onClick={() => setFilters(prev => ({ ...prev, type, subType: undefined }))}
+            onClick={() => handleSubTab(type)}
           >
-            {type === GatheringType.DALLAEM_FIT ? '달램핏' : '워케이션'}
-          </button>
-        ))}
-      </nav>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {SUB_TYPES.map((subType) => (
-          <button
-            key={String(subType)}
-            className={`px-4 py-2 rounded ${
-              filters.subType === subType
-                ? 'bg-black text-white'
-                : 'bg-gray-100 text-gray-700'
-            }`}
-            onClick={() => setFilters(prev => ({ ...prev, subType }))}
-          >
-            {subType === undefined
-              ? '전체'
-              : subType === GatheringType.OFFICE_STRETCHING
-              ? '오피스 스트레칭'
-              : '마인드풀니스'}
+            {GATHERING_LABEL_MAP[type]}
           </button>
         ))}
       </div>
 
-      <div className="flex items-center gap-2">
+      {/* 필터/정렬 */}
+      <div className="flex gap-2 items-center mb-3">
+        {/* 지역 */}
+        <div className="relative">
+          <select
+            value={filters.location}
+            onChange={handleLocation}
+            className="appearance-none border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 pr-6 focus:ring-2 focus:ring-main-500 transition"
+          >
+            <option value="">지역 전체</option>
+            <option value="건대입구">건대입구</option>
+            <option value="을지로3가">을지로3가</option>
+            <option value="신림">신림</option>
+            <option value="홍대입구">홍대입구</option>
+          </select>
+          <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        </div>
+        {/* 날짜 (라벨+date picker) */}
         <div className="relative">
           <button
-            className="flex items-center px-4 py-2 border rounded text-sm bg-white"
-            onClick={() => setLocOpen(open => !open)}
+            type="button"
+            className="border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 flex items-center justify-between"
+            onClick={() => setDatePickerOpen(true)}
           >
-            {filters.location || '전체'}
-            <ChevronDown className="ml-2" size={16} />
+            {getDateLabel(filters.date)}
+            <ChevronDown className="w-4 h-4 ml-1 text-gray-400" />
           </button>
-          {locOpen && (
-            <ul className="absolute mt-1 bg-white border rounded shadow-lg w-full z-10">
-              {LOCATIONS.map(loc => (
-                <li
-                  key={loc}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
-                  onClick={() => {
-                    setFilters(prev => ({
-                      ...prev,
-                      location: loc === '전체' ? '' : loc,
-                    }));
-                    setLocOpen(false);
-                  }}
-                >
-                  {loc}
-                </li>
-              ))}
-            </ul>
+          {/* 날짜 선택: 실제 date picker가 아니라면 아래 인풋 참고 */}
+          {datePickerOpen && (
+            <input
+              type="date"
+              value={filters.date}
+              onChange={e => { handleDate(e); setDatePickerOpen(false); }}
+              onBlur={() => setDatePickerOpen(false)}
+              className="absolute left-0 top-10 z-10 border px-2 py-1 bg-white rounded"
+              autoFocus
+            />
           )}
         </div>
-
-        <input
-          type="date"
-          className="px-3 py-2 border rounded text-sm"
-          value={filters.date}
-          onChange={e => setFilters(prev => ({ ...prev, date: e.target.value }))}
-        />
-
-        <select
-          className="px-3 py-2 border rounded text-sm"
-          value={filters.sortBy}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            setFilters(prev => ({
-              ...prev,
-              sortBy: e.target.value as SortValue,
-            }))
-          }
-        >
-          {SORT_OPTIONS.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
+        {/* 정렬(최신순/마감임박/참여인원순) */}
+        <div className="relative">
+          <select
+            value={filters.sortBy}
+            onChange={handleSort}
+            className="appearance-none border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 pr-6 focus:ring-2 focus:ring-main-500 transition"
+          >
+            <option value="dateTime">최신순</option>
+            <option value="registrationEnd">마감 임박</option>
+            <option value="participantCount">참여 인원순</option>
+          </select>
+          <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

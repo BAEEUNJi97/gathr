@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useContext,
@@ -5,8 +7,8 @@ import {
   ReactNode,
   Dispatch,
   SetStateAction,
-} from 'react';
-import { GatheringFilters, GatheringType } from '@/types/gathering';
+} from "react";
+import { GatheringFilters } from "@/types/gathering";
 
 interface FilterContextType {
   filters: GatheringFilters;
@@ -15,22 +17,14 @@ interface FilterContextType {
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
-interface FilterProviderProps {
-  children: ReactNode;
-  initialFilters?: Partial<GatheringFilters>;
-}
-
-export function FilterProvider({
-  children,
-  initialFilters,
-}: FilterProviderProps) {
+export function FilterProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<GatheringFilters>({
-    type: GatheringType.DALLAEM_FIT,
-    subType: undefined,
-    location: '',
-    date: '',
-    sortBy: 'dateTime',
-    ...initialFilters,
+    mainTab: "DALLEM",
+    subTab: "", // 전체보기(서브탭 X)
+    location: "",
+    date: "",
+    sortBy: "dateTime",
+    sortOrder: "desc",
   });
 
   return (
@@ -42,8 +36,7 @@ export function FilterProvider({
 
 export function useFilters(): FilterContextType {
   const context = useContext(FilterContext);
-  if (!context) {
-    throw new Error('useFilters must be used within a FilterProvider');
-  }
+  if (!context)
+    throw new Error("useFilters must be used within a FilterProvider");
   return context;
 }

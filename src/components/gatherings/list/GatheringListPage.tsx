@@ -1,31 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import FilterHeader from './FilterHeader';
-import GatheringsList from './GatheringsList'; // 모임 목록
-import CreateMeetingModal from '../create/CreateMeetingModal';
-import { useFilters } from '@/contexts/FilterContext'; // 필터 상태 사용
+import { useState } from "react";
+import FilterHeader from "./FilterHeader";
+import GatheringsList from "./GatheringsList";
+import CreateMeetingModal from "../create/CreateMeetingModal";
 
 export default function GatheringListPage() {
-  const { filters, setFilters } = useFilters(); // useFilters 훅을 통해 전역 필터 상태 가져오기
-  const [isClient, setIsClient] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);  // 모달 상태
-
-  const openModal = () => setIsModalOpen(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) return null;
-
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      {/* 필터 설정 컴포넌트 */}
-      <FilterHeader filters={filters} setFilters={setFilters} openModal={openModal} />
-      {/* 필터링된 목록 */}
-      <GatheringsList fetchFromApi={true} filters={filters} />
+    <div className="mx-auto max-w-5xl px-4 py-10">
+      {/* 필터 헤더 (openModal만 prop으로) */}
+      <FilterHeader />
+      {/* 실제 리스트는 context 필터로 필터링 */}
+      <GatheringsList />
       <CreateMeetingModal open={isModalOpen} onClose={closeModal} />
     </div>
   );

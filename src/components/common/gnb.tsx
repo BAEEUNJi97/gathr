@@ -14,7 +14,7 @@ export default function GNB() {
     <nav className="bg-orange-600 text-white w-full h-16 flex items-center justify-between px-8 shadow-md">
       {/* 왼쪽: 로고 + 메뉴 */}
       <div className="flex items-center gap-6">
-        <Link href="/gatherings" className="font-bold text-lg">
+        <Link href="/" className="font-bold text-lg">
           같이달램
         </Link>
         <div className="flex items-center gap-4 text-sm">

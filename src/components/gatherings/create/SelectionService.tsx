@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { GatheringType } from '@/types/gathering';
 
 const SERVICE_OPTIONS: { id: GatheringType; label: string }[] = [
-  { id: GatheringType.DALLAEM_FIT,       label: '달램핏' },
   { id: GatheringType.OFFICE_STRETCHING, label: '오피스 스트레칭' },
   { id: GatheringType.MINDFULNESS,       label: '마인드풀니스' },
   { id: GatheringType.WORKATION,         label: '워케이션' },

@@ -1,4 +1,3 @@
-// app/signup/page.tsx
 "use client";
 
 export default function GatheringsPage() {

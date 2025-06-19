@@ -1,62 +1,68 @@
-'use client';
+import { useFilters } from "@/contexts/FilterContext";
+import { Gathering } from "@/types/gathering";
+import { useEffect, useState } from "react";
+import { getGatherings } from "@/services/gatheringService"; // 실제 API 서비스
+import { MAIN_TAB_TYPE_MAP } from "@/types/gathering";
+import GatheringCard from "./GatheringCard"; 
+import EmptyMessage from "./EmptyMessage";
+import LoadingSpinner from "./LoadingSpinner";
 
-import { useRef, useState, useEffect } from 'react';
-import { useFetchInfiniteGatherings } from '@/hooks/api/useFetchInfiniteGatherings';
-import GatheringCard from './GatheringCard';
-import LoadingSpinner from './LoadingSpinner';
-import EmptyMessage from './EmptyMessage';
-import { GatheringFilters, Gathering } from '@/types/gathering';
+export default function GatheringsList() {
+  const { filters } = useFilters();
+  const [gatherings, setGatherings] = useState<Gathering[]>([]);
+  const [loading, setLoading] = useState(true);
 
-interface Props {
-  filters: GatheringFilters;
-  fetchFromApi?: boolean;
-}
+useEffect(() => {
+  const fetch = async () => {
+    setLoading(true);
 
-export default function GatheringsList({
-  filters,
-  fetchFromApi = true,
-}: Props) {
-  const {
-    gatherings: allGatherings,
-    isLoading,
-    isError,
-  } = useFetchInfiniteGatherings(filters, fetchFromApi);
+    if (filters.subTab) {
+      const params = {
+        type: filters.subTab,
+        location: filters.location,
+        date: filters.date,
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder,
+      };
+      const data = await getGatherings(params);
+      setGatherings(data);
+      setLoading(false);
+      return;
+    }
 
-  // 화면에 보일 아이템 수 (초기 10개)
-  const [visibleCount, setVisibleCount] = useState(10);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  // IntersectionObserver로 스크롤 끝 감지하여 visibleCount 증가
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleCount((prev) => prev + 10);
-        }
-      },
-      { rootMargin: '0px', threshold: 1.0 }
+    const typeArr = MAIN_TAB_TYPE_MAP[filters.mainTab];
+    const results = await Promise.all(
+      typeArr.map((t) =>
+        getGatherings({
+          type: t,
+          location: filters.location,
+          date: filters.date,
+          sortBy: filters.sortBy,
+          sortOrder: filters.sortOrder,
+        })
+      )
     );
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-    return () => observer.disconnect();
-  }, []);
 
-  if (isLoading) return <LoadingSpinner />;
-  if (isError)
-    return <div className="text-center">데이터 로드 중 오류가 발생했습니다.</div>;
-  if (allGatherings.length === 0)
-    return <EmptyMessage />;
+    // 중복 제거!
+    const merged = results.flat().filter(
+      (item, idx, arr) => arr.findIndex((g) => g.id === item.id) === idx
+    );
+    setGatherings(merged);
+    setLoading(false);
+  };
+  fetch();
+}, [filters]);
 
-  // 전체 데이터에서 visibleCount 만큼만 잘라서 렌더링
-  const visibleList: Gathering[] = allGatherings.slice(0, visibleCount);
+  // location/date 등 filters로 이미 서버에서 필터링됨. 추가로 프론트에서 조건필터 원하면 여기에 && 추가
+
+  if (loading) return <LoadingSpinner />;
+  if (!gatherings.length) return <EmptyMessage />;
 
   return (
     <div className="flex flex-col gap-4">
-      {visibleList.map((g) => (
-        <GatheringCard key={g.id} gathering={g} />
+      {gatherings.map((item) => (
+        <GatheringCard key={item.id} gathering={item} />
       ))}
-
-      {/* 화면 하단에 닿으면 visibleCount를 +10 해 줌 */}
-      <div ref={loadMoreRef} className="h-1" />
     </div>
   );
 }
