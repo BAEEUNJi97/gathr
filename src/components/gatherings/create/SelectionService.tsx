@@ -35,7 +35,7 @@ export default function SelectionService({ selectedType, onSelect }: Props) {
             }}
             className={`px-4 py-2 border rounded text-sm font-medium ${
               selected === opt.id
-                ? 'bg-orange-500 text-white border-orange-500'
+                ? 'bg-gray-500 text-white border-gray-500'
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
             }`}
           >
