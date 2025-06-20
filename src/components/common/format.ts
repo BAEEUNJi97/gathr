@@ -31,3 +31,16 @@ export function getTimeRemaining(registrationEnd: string): string {
 
   return isToday ? `오늘 ${timeText} 마감` : `${formatDate(registrationEnd)} ${timeText} 마감`;
 }
+
+export function getTimeRemainingDaysOnly(registrationEnd: string): string {
+  const endTime = new Date(registrationEnd).setHours(0,0,0,0);
+  const now = new Date();
+  now.setHours(0,0,0,0); // 오늘 기준
+
+  const diff = endTime - now.getTime();
+
+  if (diff <= 0) return '마감됨';
+
+  const dayDiff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return `${dayDiff}일 후 마감`;
+}

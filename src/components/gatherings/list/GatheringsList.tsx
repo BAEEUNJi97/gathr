@@ -5,7 +5,8 @@ import { getGatherings } from "@/services/gatheringService"; // 실제 API 서�
 import { MAIN_TAB_TYPE_MAP } from "@/types/gathering";
 import GatheringCard from "./GatheringCard"; 
 import EmptyMessage from "./EmptyMessage";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+;
 
 export default function GatheringsList() {
   const { filters } = useFilters();

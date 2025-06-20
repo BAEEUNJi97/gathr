@@ -1,11 +1,13 @@
-"use client";
+import { FilterProvider } from '@/contexts/FilterContext'; // FilterProvider 임포트
+import GatheringListPage from '@/components/gatherings/list/GatheringListPage';
 
-export default function GatheringsPage() {
+export default function HomePage() {
   return (
-    <div className="px-4 py-6">
-   
-    </div>
-  )
+
+    <FilterProvider>
+      
+      {/* 이 부분에 FilterProvider로 감싸는 자식 컴포넌트 */}
+      <GatheringListPage />
+    </FilterProvider>
+  );
 }
-
-

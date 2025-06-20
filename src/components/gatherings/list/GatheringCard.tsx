@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { useRouter } from "next/navigation";
 import { Gathering } from '@/types/gathering';
 import Image from 'next/image';
-import { formatDate, formatTime, getTimeRemaining } from '@/components/common/format';
+import { formatDate, formatTime, getTimeRemaining, getTimeRemainingDaysOnly} from '@/components/common/format';
 import JoinedCountsProgressBar from './JoinedCountsProgressBar';
 import { Heart, AlarmClock, UserRoundCheck, CheckCircle2 } from 'lucide-react';
 
@@ -64,7 +64,7 @@ const GatheringCard = forwardRef<HTMLDivElement, GatheringCardProps>(
           >
             <AlarmClock className="w-4 h-4 text-white mr-1" />
             <span>
-              {getTimeRemaining(gathering.registrationEnd)}
+              {getTimeRemainingDaysOnly(gathering.registrationEnd)}
             </span>
           </div>
         </div>
@@ -91,8 +91,12 @@ const GatheringCard = forwardRef<HTMLDivElement, GatheringCardProps>(
             </button>
             {/* [날짜/시간 뱃지] */}
             <div className="flex flex-wrap gap-2 mb-3 mt-2">
-              <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md ${expired ? 'border-gray-400 text-gray-500' : 'border-main-500 text-main-600'}`}>{formatDate(gathering.dateTime)}</span>
-              <span className={`inline-flex items-center px-3 py-1 border-2 text-sm font-medium rounded-md ${expired ? 'border-gray-400 text-gray-500' : 'border-main-500 text-main-600'}`}>{formatTime(gathering.dateTime)}</span>
+              <span className="inline-flex items-center px-3 py-1 bg-[#151924] text-white text-base font-semibold rounded-lg">
+                {formatDate(gathering.dateTime)}
+              </span>
+              <span className="inline-flex items-center px-3 py-1 bg-[#151924] text-[#FF7710] text-base font-bold rounded-lg">
+                {formatTime(gathering.dateTime)}
+              </span>
             </div>
           </div>
 
