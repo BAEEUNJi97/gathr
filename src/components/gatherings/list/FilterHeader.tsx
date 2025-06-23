@@ -1,64 +1,52 @@
 import { useFilters } from '@/contexts/FilterContext';
 import { MAIN_TAB_TYPE_MAP, GatheringType, MainTab, GATHERING_LABEL_MAP } from '@/types/gathering';
-import { ChevronDown, Sun, Umbrella } from 'lucide-react';
-import {  useState } from 'react';
+import { ChevronDown, Sun, Umbrella, Calendar } from 'lucide-react';
+import { useState } from 'react';
 import CreateMeetingButtonWithModal from '@/components/common/CreateMeetingButtonWithModal';
 
+// 날짜 라벨 함수(네가 쓰던거!)
 function getDateLabel(date: string) {
   if (!date) return "날짜 전체";
   const [, mm, dd] = date.split('-');
   return `${Number(mm)}월 ${Number(dd)}일`;
 }
 
+// 정렬 옵션(최신순 X!)
+const SORT_OPTIONS = [
+  { value: "registrationEnd", label: "마감 임박" },
+  { value: "participantCount", label: "참여 인원순" },
+];
+
 export default function FilterHeader() {
   const { filters, setFilters } = useFilters();
 
-  // 메인탭 선택
-  const handleMainTab = (tab: MainTab) => {
-    setFilters((prev) => ({
-      ...prev,
-      mainTab: tab,
-      subTab: '',
-    }));
-  };
-
-  // 서브탭 목록
+  // 메인탭/서브탭
+  const handleMainTab = (tab: MainTab) => setFilters(prev => ({
+    ...prev, mainTab: tab, subTab: '',
+  }));
   const subTabTypes: GatheringType[] = [...MAIN_TAB_TYPE_MAP[filters.mainTab]];
+  const handleSubTab = (type: GatheringType | "") => setFilters(prev => ({
+    ...prev, subTab: prev.subTab === type ? "" : type,
+  }));
 
-  // 서브탭 선택
-  const handleSubTab = (type: GatheringType | "") => {
-    setFilters((prev) => ({
-      ...prev,
-      subTab: prev.subTab === type ? "" : type,
-    }));
-  };
-
-  // 지역/날짜/정렬 필터
-    const handleLocation = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    setFilters((prev) => ({
-      ...prev,
-      location: e.target.value as "" | "건대입구" | "을지로3가" | "신림" | "홍대입구",
-    }));
-
- const handleDate = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFilters((prev) => ({
-      ...prev,
-      date: e.target.value,
-    }));
-
+  // 지역/날짜/정렬 핸들러(너가 쓰던거!)
+  const handleLocation = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setFilters(prev => ({ ...prev, location: e.target.value as "" | "건대입구" | "을지로3가" | "신림" | "홍대입구" }));
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFilters(prev => ({ ...prev, date: e.target.value }));
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
-      sortBy: e.target.value as "dateTime" | "registrationEnd" | "participantCount",
-      sortOrder: e.target.value === 'dateTime' ? 'desc' : 'asc',
+      sortBy: e.target.value as "registrationEnd" | "participantCount",
+      sortOrder: e.target.value === 'registrationEnd' ? 'asc' : 'desc',
     }));
 
-  // 날짜 필터 버튼을 위한 상태
-   const [datePickerOpen, setDatePickerOpen] = useState(false);
+  // 날짜 달력
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   return (
     <div className="mb-8">
-      {/* 인트로 문구 */}
+      {/* 🟠 인트로/만들기 버튼 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="rounded-full bg-orange-50 w-14 h-14 flex items-center justify-center text-3xl">
@@ -72,7 +60,7 @@ export default function FilterHeader() {
         <CreateMeetingButtonWithModal />
       </div>
 
-      {/* 메인탭 */}
+      {/* 🟠 메인탭 */}
       <div className="flex gap-8 mb-4">
         <button
           className={`flex items-center gap-1 px-0 pb-1 text-base font-semibold border-b-2 transition ${
@@ -98,7 +86,7 @@ export default function FilterHeader() {
         </button>
       </div>
 
-      {/* 서브탭 */}
+      {/* 🟠 서브탭 */}
       <div className="flex gap-2 mb-6">
         <button
           type="button"
@@ -123,14 +111,14 @@ export default function FilterHeader() {
         ))}
       </div>
 
-      {/* 필터/정렬 */}
-      <div className="flex gap-2 items-center mb-3">
+      {/* 🟠 필터라인(지역/날짜/정렬) - 구분선까지! */}
+      <div className="flex items-center gap-0 mb-3 py-4 border-b border-gray-200">
         {/* 지역 */}
         <div className="relative">
           <select
             value={filters.location}
             onChange={handleLocation}
-            className="appearance-none border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 pr-6 focus:ring-2 focus:ring-main-500 transition"
+            className="appearance-none border-none bg-transparent text-gray-800 px-4 py-2 rounded-lg text-base font-semibold w-36 pr-6 focus:ring-0 focus:outline-none"
           >
             <option value="">지역 전체</option>
             <option value="건대입구">건대입구</option>
@@ -138,42 +126,49 @@ export default function FilterHeader() {
             <option value="신림">신림</option>
             <option value="홍대입구">홍대입구</option>
           </select>
-          <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <ChevronDown className="w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         </div>
-        {/* 날짜 (라벨+date picker) */}
+        {/* 세로 구분선 */}
+        <div className="mx-2 h-6 border-l border-gray-200" />
+
+        {/* 날짜 */}
         <div className="relative">
           <button
             type="button"
-            className="border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 flex items-center justify-between"
+            className="flex items-center gap-2 text-base font-semibold text-gray-800 px-4 py-2 rounded-lg bg-transparent border-none"
             onClick={() => setDatePickerOpen(true)}
           >
-            {getDateLabel(filters.date)}
-            <ChevronDown className="w-4 h-4 ml-1 text-gray-400" />
+            <span className={filters.date ? "font-bold" : "text-gray-400"}>
+              {getDateLabel(filters.date)}
+            </span>
+            <Calendar className="w-5 h-5 text-gray-400" />
           </button>
-          {/* 날짜 선택: 실제 date picker가 아니라면 아래 인풋 참고 */}
           {datePickerOpen && (
             <input
               type="date"
               value={filters.date}
               onChange={e => { handleDate(e); setDatePickerOpen(false); }}
               onBlur={() => setDatePickerOpen(false)}
-              className="absolute left-0 top-10 z-10 border px-2 py-1 bg-white rounded"
+              className="absolute left-0 top-11 z-10 border px-2 py-1 bg-white rounded"
               autoFocus
             />
           )}
         </div>
-        {/* 정렬(최신순/마감임박/참여인원순) */}
-        <div className="relative">
+        {/* 세로 구분선 */}
+        <div className="mx-2 h-6 border-l border-gray-200" />
+
+        {/* 정렬 - 우측 */}
+        <div className="relative ml-auto">
           <select
             value={filters.sortBy}
             onChange={handleSort}
-            className="appearance-none border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm w-32 pr-6 focus:ring-2 focus:ring-main-500 transition"
+            className="appearance-none border-none bg-transparent text-gray-800 px-4 py-2 rounded-lg text-base font-semibold w-44 pr-8 focus:ring-0 focus:outline-none"
           >
-            <option value="dateTime">최신순</option>
-            <option value="registrationEnd">마감 임박</option>
-            <option value="participantCount">참여 인원순</option>
+            {SORT_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
           </select>
-          <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <ChevronDown className="w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         </div>
       </div>
     </div>
