@@ -4,7 +4,7 @@
 import React from "react";
 import { GatheringDetail } from "@/types/gathering";
 import JoinedCountsProgressBar from "@/components/gatherings/list/JoinedCountsProgressBar";
-import { formatDate, formatTime, getTimeRemaining, getTimeRemainingDaysOnly} from '@/components/common/format';
+import { formatDate, formatTime, getTimeRemainingDaysOnly} from '@/components/common/format';
 import { Heart } from "lucide-react";
 import Image from "next/image";
 
