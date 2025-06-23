@@ -14,6 +14,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      // 모임 목록 조회를 API로 프록시
+      {
+        source: '/gatherings',
+        destination: '/api/gatherings',
+      },
+      // 모임 상세 조회 (ID 포함) 프록시
+      {
+        source: '/gatherings/:id',
+        destination: '/api/gatherings/:id',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
