@@ -1,4 +1,5 @@
-import axios , { TEAM_ID } from "@/lib/axiosInstance";
+import  { TEAM_ID } from "@/lib/axiosInstance";
+import axios from "axios";
 import { CreateGatheringForm } from '@/types/gathering';
 import { mapGatheringTypeToApi } from "@/utils/mapGatheringTypeToApi";
 
@@ -20,5 +21,5 @@ export async function createGathering(data: CreateGatheringForm) {
   return axios.post(`/${TEAM_ID}/gatherings`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
-
 }
+

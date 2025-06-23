@@ -4,6 +4,7 @@ import {
   Gathering,
   GatheringListApiParams,
   CreateGatheringForm,
+  GatheringDetail
 } from "@/types/gathering";
 
 /**
@@ -53,3 +54,13 @@ export async function createGathering(
   );
   return response.data;
 }
+
+export async function getGatheringDetail(
+  id: number
+): Promise<GatheringDetail> {
+  const res = await axiosInstance.get<GatheringDetail>(
+    `/gatherings/${id}`
+  );
+  return res.data;
+}
+

@@ -38,7 +38,7 @@ export interface GatheringFilters {
 // -------------------
 // API 호출 파라미터
 export interface GatheringListApiParams {
-  type: GatheringType;  // 서버가 요구하는 타입만
+  type?: GatheringType;
   location?: "" | "건대입구" | "을지로3가" | "신림" | "홍대입구";
   date?: string;
   sortBy?: "dateTime" | "registrationEnd" | "participantCount";
@@ -71,4 +71,21 @@ export interface Gathering {
   registrationEnd: string;          // ISO
   capacity: number;
   participantCount: number;
+}
+
+// -------------------
+// 상세페이지 
+export interface GatheringDetail {
+  teamId: string;
+  id: number;
+  type: string;
+  name: string;
+  dateTime: string;
+  registrationEnd: string;
+  location: string;
+  participantCount: number;
+  capacity: number;
+  image: string;
+  createdBy: number;
+  canceledAt: string | null;
 }
