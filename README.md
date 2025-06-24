@@ -3,17 +3,14 @@
 모임 탐색 · 관리 웹앱  
 with **Next.js · TypeScript · Tailwind CSS**
 
-[🚀 배포 바로가기](https://fe-adv-project-together-dallaem.vercel.app)
+[🚀 배포 바로가기](https://gathr-baeeunjis-projects.vercel.app/)
 
 ---
 
 ## ✨ 프로젝트 소개
 
-모임 찾기부터, 참여, 찜, 리뷰까지  
-실제 서비스처럼 동작하는 **풀스택 프론트엔드 실전 프로젝트**입니다.
-
 - 디자인 시안 & Swagger API 기반 설계
-- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 테스트, 배포, CI/CD까지 직접 구현
+- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 배포
 
 ---
 
@@ -36,7 +33,7 @@ with **Next.js · TypeScript · Tailwind CSS**
 | :--: | :------: | :--------: | :-: |
 |  ✔️  |   ✔️     |    ✔️      | ✔️  |
 
-| 회원가입/로그인 | 토큰 인증 | 유효성 검사 | 찜하기(localStorage) |
+| 회원가입/로그인 | 토큰 인증 | 유효성 검사 |
 |:---:|:---:|:---:|:---:|
 | ✔️  | ✔️  | ✔️  | ✔️  |
 
@@ -54,7 +51,6 @@ with **Next.js · TypeScript · Tailwind CSS**
 - React Hook Form (폼 검증)
 - Axios (Interceptor)
 - React Context API (Auth, Filter)
-- Jest & React Testing Library
 - Vercel (배포)
 - GitHub Actions (CI/CD)
 
@@ -72,10 +68,6 @@ my-project/
 ├── types/ # 타입 정의
 ├── styles/ # Tailwind 설정
 └── public/ # 정적 리소스(이미지)
-
-yaml
-복사
-편집
 
 ---
 
@@ -99,26 +91,20 @@ Swagger API Docs: API Docs
 팀 ID(tenantId) 기반 데이터 분리
 
 🏁 개발 포인트 & 회고
-90%+ 구현 (주요 기능/반응형/SSR/테스트 OK)
+70%+ 구현 (주요 기능/반응형/SSR)
 
 SSR/CSR 데이터 처리, 에러 핸들링, 모듈화 직접 설계/구현
 
 디자인/UX 일관성, 예외 처리 지속 개선 중
 
-실서비스 배포/테스트/CI 경험
+실서비스 배포
 
 <details> <summary>🔎 실전에서 겪은 시행착오/오류 기록 보기</summary>
 Axios 에러/토큰 만료/유효성 실패 등 경험
 
-SSR/CSR 분기, localStorage 동기화 등 직접 해결
-
-오류/리팩토링 사례: docs/error-cases.md
 
 </details>
-🧪 테스트/배포
-pnpm test (Jest + RTL, 주요 컴포넌트 커버리지 80% 이상)
-
-CI/CD
+🧪배포
 
 GitHub Actions: PR 자동 빌드/테스트
 
