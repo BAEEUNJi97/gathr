@@ -3,7 +3,7 @@
 모임 탐색 · 관리 웹앱  
 with **Next.js · TypeScript · Tailwind CSS**
 
-[🚀 배포 바로가기](https://gathr-baeeunjis-projects.vercel.app/)
+[🚀 배포 바로가기](https://gathr-six.vercel.app/)
 
 ---
 
