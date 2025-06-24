@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/contexts/AuthProvider';
 import Image from 'next/image';
@@ -19,7 +19,8 @@ export default function LoginForm() {
   // 모달 상태
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
+  // 리디렉션 flag: 모달에서만 페이지 이동
+  const redirectAfterModal = useRef(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,7 +31,7 @@ export default function LoginForm() {
     e.preventDefault();
     if (!form.email || !form.password) {
       setModalMsg('이메일과 비밀번호를 모두 입력해주세요.');
-      setIsSuccess(false);
+      redirectAfterModal.current = false;
       setModalOpen(true);
       return;
     }
@@ -38,7 +39,7 @@ export default function LoginForm() {
     try {
       await signin(form.email, form.password);
       setModalMsg('로그인 성공! 메인 페이지로 이동합니다.');
-      setIsSuccess(true);
+      redirectAfterModal.current = true; // ✅ 이동은 모달에서만!
       setModalOpen(true);
     } catch (err: unknown) {
       let msg = '로그인 실패 (알 수 없는 오류)';
@@ -46,16 +47,17 @@ export default function LoginForm() {
         msg = err.response.data?.message || '이메일 또는 비밀번호를 다시 확인해주세요.';
       }
       setModalMsg(msg);
-      setIsSuccess(false);
+      redirectAfterModal.current = false;
       setModalOpen(true);
     }
   };
 
-  // 모달 닫기 핸들러
+  // 모달 닫기 핸들러: 여기서만 router.push!
   const handleModalClose = () => {
     setModalOpen(false);
-    if (isSuccess) {
-      router.push('/'); // 메인 페이지로 이동!
+    if (redirectAfterModal.current) {
+      router.push('/');
+      redirectAfterModal.current = false;
     }
   };
 
@@ -78,7 +80,7 @@ export default function LoginForm() {
             onSubmit={handleSubmit}
             className="w-full max-w-[340px] flex flex-col"
           >
-            <h2 className="text-2xl font-bold mb-8 text-center text-orange-500 ">로그인</h2>
+            <h2 className="text-2xl font-bold mb-8 text-center text-orange-500">로그인</h2>
             <div className="mb-6">
               <label className="block mb-2 text-base font-medium">아이디</label>
               <input

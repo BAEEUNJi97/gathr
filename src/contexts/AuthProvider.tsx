@@ -159,6 +159,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (isLoading) return;
     if (!token && pathname.startsWith('/mypage')) {
+      alert('로그인이 필요합니다.');
       router.replace('/login');
     }
     if (pathname !== '/login' && !pathname.includes('/auth/')) {
