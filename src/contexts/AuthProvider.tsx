@@ -91,7 +91,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (res.status === 200 && res.data?.token) {
         localStorage.setItem('token', res.data.token);
         setToken(res.data.token);
-        alert('로그인에 성공했습니다.');
         await fetchUser();
         router.replace(previousPath);
       }
@@ -115,7 +114,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         companyName,
       });
       if (res.status === 200) {
-        alert('회원가입이 완료되었습니다.');
         router.replace('/login');
       }
     } catch (err) {
@@ -161,7 +159,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (isLoading) return;
     if (!token && pathname.startsWith('/mypage')) {
-      alert('로그인이 필요합니다.');
       router.replace('/login');
     }
     if (pathname !== '/login' && !pathname.includes('/auth/')) {

@@ -4,14 +4,14 @@ import { ChevronDown, Sun, Umbrella, Calendar } from 'lucide-react';
 import { useState } from 'react';
 import CreateMeetingButtonWithModal from '@/components/common/CreateMeetingButtonWithModal';
 
-// 날짜 라벨 함수(네가 쓰던거!)
+// 날짜 라벨 함수
 function getDateLabel(date: string) {
   if (!date) return "날짜 전체";
   const [, mm, dd] = date.split('-');
   return `${Number(mm)}월 ${Number(dd)}일`;
 }
 
-// 정렬 옵션(최신순 X!)
+// 정렬 옵션
 const SORT_OPTIONS = [
   { value: "registrationEnd", label: "마감 임박" },
   { value: "participantCount", label: "참여 인원순" },
@@ -29,7 +29,7 @@ export default function FilterHeader() {
     ...prev, subTab: prev.subTab === type ? "" : type,
   }));
 
-  // 지역/날짜/정렬 핸들러(너가 쓰던거!)
+  // 지역/날짜/정렬 핸들러
   const handleLocation = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setFilters(prev => ({ ...prev, location: e.target.value as "" | "건대입구" | "을지로3가" | "신림" | "홍대입구" }));
   const handleDate = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -45,8 +45,8 @@ export default function FilterHeader() {
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   return (
-    <div className="mb-8">
-      {/* 🟠 인트로/만들기 버튼 */}
+    <div>
+      {/* /만들기 버튼 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="rounded-full bg-orange-50 w-14 h-14 flex items-center justify-center text-3xl">
@@ -86,7 +86,7 @@ export default function FilterHeader() {
         </button>
       </div>
 
-      {/* 🟠 서브탭 */}
+      {/* 서브탭 */}
       <div className="flex gap-2 mb-6">
         <button
           type="button"
@@ -111,7 +111,7 @@ export default function FilterHeader() {
         ))}
       </div>
 
-      {/* 🟠 필터라인(지역/날짜/정렬) - 구분선까지! */}
+      {/*  필터라인(지역/날짜/정렬) - 구분선까지! */}
       <div className="flex items-center gap-0 mb-3 py-4 border-b border-gray-200">
         {/* 지역 */}
         <div className="relative">
