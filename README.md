@@ -8,21 +8,19 @@ with **Next.js · TypeScript · Tailwind CSS**
 ---
 
 ## ✨ 프로젝트 소개
-
-- 디자인 시안 & Swagger API 기반 설계
-- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 배포
+- 디자인 시안 & Swagger API 기반 설계  
+- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 배포까지 경험
 
 ---
 
 ## 🏆 주요 기능
-
-- 모임 목록 등록 / 참여
-- 찜하기(로컬스토리지)(예정)
-- 카테고리/날짜/지역/참여 인원 필터 & 정렬
-- 무한 스크롤(SSR)
-- 상세 페이지(메모/이미지 업로드)
-- 리뷰 페이지(평점 하트, 분포 막대, 페이지네이션)(예정)
-- 상태별 UI / 진행도 Progress Bar
+- 모임 **등록 / 참여 / 상세 조회**
+- 찜하기(로컬스토리지, 예정)
+- **카테고리 · 날짜 · 지역 · 인원** 기반 필터 & 정렬
+- 무한 스크롤 (SSR 적용)
+- 상세 페이지: 메모 작성 / 이미지 업로드
+- 리뷰 페이지: 평점 하트 · 분포 막대 그래프 · 페이지네이션 (예정)
+- 진행 상태별 UI & Progress Bar
 - **PC/모바일 완벽 반응형**
 
 ---
@@ -31,33 +29,31 @@ with **Next.js · TypeScript · Tailwind CSS**
 
 | CRUD | 필터/정렬 | 무한스크롤 | SSR |
 | :--: | :------: | :--------: | :-: |
-|  ✔️  |   ✔️     |    ✔️      | ✔️  |
+| ✔️ | ✔️ | ✔️ | ✔️ |
 
 | 회원가입/로그인 | 토큰 인증 | 유효성 검사 |
-|:---:|:---:|:---:|:---:|
-| ✔️  | ✔️  | ✔️  | ✔️  |
+| :--: | :--: | :--: |
+| ✔️ | ✔️ | ✔️ |
 
 | 모달 | Progress Bar | 리뷰(목업) | 반응형 |
-|:---:|:---:|:---:|:---:|
-| ✔️  | ✔️  | ✔️  | ✔️  |
+| :--: | :--: | :--: | :--: |
+| ✔️ | ✔️ | ✔️ | ✔️ |
 
 ---
 
 ## 🛠️ 사용 기술
-
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS
+- **Next.js 14 (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
 - React Hook Form (폼 검증)
-- Axios (Interceptor)
-- React Context API (Auth, Filter)
+- Axios (Interceptor 적용)
+- React Context API (Auth, Filter 관리)
 - Vercel (배포)
-- GitHub Actions (CI/CD)
+- GitHub Actions (CI/CD 자동화)
 
 ---
 
 ## 📂 디렉토리 구조
-
 my-project/
 ├── app/ # 라우팅 (로그인, 회원가입, 모임)
 ├── components/ # 공용 UI, 모임 컴포넌트
@@ -69,58 +65,59 @@ my-project/
 ├── styles/ # Tailwind 설정
 └── public/ # 정적 리소스(이미지)
 
+yaml
+코드 복사
+
 ---
 
-## ⚡️ 실행 방법
-
+## ⚡ 실행 방법
 ```bash
 # 의존성 설치
 pnpm install
 
-# 개발 서버
+# 개발 서버 실행
 pnpm dev
 
-# 프로덕션 빌드/실행
+# 프로덕션 빌드 & 실행
 pnpm build
 pnpm start
-접속: http://localhost:3000
-
+# 접속: http://localhost:3000
 📡 API & 문서
-Swagger API Docs: API Docs
+Swagger API Docs 제공
+→ 팀 ID(tenantId) 기반 데이터 분리
 
-팀 ID(tenantId) 기반 데이터 분리
+📝 개발 포인트 & 회고
+주요 기능 70%+ 구현 (반응형, SSR 포함)
 
-🏁 개발 포인트 & 회고
-70%+ 구현 (주요 기능/반응형/SSR)
+SSR/CSR 데이터 처리 & 에러 핸들링 직접 설계
 
-SSR/CSR 데이터 처리, 에러 핸들링, 모듈화 직접 설계/구현
+디자인/UX 일관성 확보, 예외 처리 지속 개선
 
-디자인/UX 일관성, 예외 처리 지속 개선 중
+실제 서비스 배포 경험
 
-실서비스 배포
+<details> <summary>🔎 시행착오/에러 경험</summary>
+Axios 에러 핸들링
 
-<details> <summary>🔎 실전에서 겪은 시행착오/오류 기록 보기</summary>
-Axios 에러/토큰 만료/유효성 실패 등 경험
+토큰 만료 처리
 
+유효성 검사 실패 대응
 
 </details>
-🧪배포
-
-GitHub Actions: PR 자동 빌드/테스트
+🧪 배포 & 협업
+GitHub Actions: PR 자동 빌드 & 테스트
 
 Vercel: 메인 브랜치 자동 배포
 
-🌱 기여/협업 가이드
-브랜치: feature/, fix/
+기여 가이드
+브랜치 네이밍: feature/, fix/
 
-커밋 메시지: feat:, fix:, docs:, chore:
+커밋 컨벤션: feat:, fix:, docs:, chore:
 
-PR: 스크린샷/변경 설명/리뷰 포함
+PR: 스크린샷 · 변경 설명 · 리뷰 포함
 
-Issue 등록 → 브랜치 생성 → PR → 리뷰/머지
+Workflow: Issue 등록 → 브랜치 생성 → PR → 리뷰/머지
 
-📨 문의
+📩 문의
 Email: your.email@example.com
 
 GitHub Issue: 바로가기
-
