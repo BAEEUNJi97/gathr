@@ -65,8 +65,6 @@ my-project/
 ├── styles/ # Tailwind 설정
 └── public/ # 정적 리소스(이미지)
 
-yaml
-코드 복사
 
 ---
 
