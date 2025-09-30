@@ -117,7 +117,4 @@ PR: 스크린샷 · 변경 설명 · 리뷰 포함
 
 Workflow: Issue 등록 → 브랜치 생성 → PR → 리뷰/머지
 
-📩 문의
-Email: your.email@example.com
-
 GitHub Issue: 바로가기
