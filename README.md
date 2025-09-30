@@ -9,7 +9,7 @@ with **Next.js · TypeScript · Tailwind CSS**
 
 ## ✨ 프로젝트 소개
 - 디자인 시안 & Swagger API 기반 설계  
-- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 배포까지 경험
+- 공용 UI, 반응형, SSR, 모달, 무한스크롤, 인증, 배포
 
 ---
 
