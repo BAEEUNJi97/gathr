@@ -20,8 +20,8 @@ with **Next.js · TypeScript · Tailwind CSS**
 - 무한 스크롤 (SSR 적용)
 - 상세 페이지: 메모 작성 / 이미지 업로드
 - 리뷰 페이지: 평점 하트 · 분포 막대 그래프 · 페이지네이션 (예정)
-- 진행 상태별 UI & Progress Bar
-- **PC/모바일 완벽 반응형**
+- 진행 상태별 UI & Progress Bar (예정)
+- **PC/모바일 반응형**
 
 ---
 
